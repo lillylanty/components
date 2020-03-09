@@ -15,3 +15,17 @@ yarn doc
 webpack.config.doc.js 配置入口和输出的html文件的名字
 package.json中添加doc命令
 因为配置tsconfig.json 里有outdir 配置所以输出了.d.ts文件， 所以修改config.doc.js中的output
+然后到github仓库中 settings 设置 page
+编写自动化 deploy 脚本
+
+如 doc.sh
+```
+#!/bin/env bash
+yarn doc
+git checkout page  
+mv doc/* ./
+git add .
+git commit -m"update"
+git push
+git checkout master
+```

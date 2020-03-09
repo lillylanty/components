@@ -29,3 +29,6 @@ git commit -m"update"
 git push
 git checkout master
 ```
+
+
+然后执行 sh ./doc.sh

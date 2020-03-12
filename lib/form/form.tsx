@@ -15,6 +15,7 @@ interface Props { //extends React.HTMLAttributes<any>
 	onChange: (value: formData) => void;
 	errors: { [K: string]: string[] };
 	showFirst?: boolean;
+	transformError?:(msg:string)=>string;
 
 }
 const Form: React.FunctionComponent<Props> = (props) => {
@@ -72,7 +73,15 @@ const Form: React.FunctionComponent<Props> = (props) => {
 	)
 }
 Form.defaultProps = {
-	showFirst: true
+	showFirst: true,
+	transformError: (message: string)=>{
+    const map: any = {
+      required:' 必填',
+      minLength: '太短',
+      maxLength: '太长',
+    }
+    return map[message] || '未知错误'
+  }
 }
 
 export default Form;

@@ -1,0 +1,28 @@
+@import '../_helper.scss';
+
+.fui-button{
+    padding: 4px 10px;
+    border: 1px solid #d3d3d3;
+    transition: all 250ms;
+    cursor: pointer;
+    &-primary{
+        background: fade-in($color: $main-color, $amount: 0.8);
+        color: #fff;
+    }
+    &-normal{
+        background: lighten($color: #ddd, $amount: 30%);
+        color: #333;
+    }
+    &-normal{
+        background: darken($color: $main-color, $amount: 10%);
+        color: #fff;
+    }
+    &:not(:first-child){
+        margin-right: 10px;
+    }
+   &:hover{ //  
+        outline: none;
+        border: 1px solid fade-in($color: $main-color, $amount: 0.5) 
+    }
+    &:focus{ outline:0 }
+}

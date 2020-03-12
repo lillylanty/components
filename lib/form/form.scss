@@ -1,0 +1,52 @@
+.fui-form{
+    // border: 1px solid red;
+    &-row{
+        margin: 18px 0;
+        &:first-child{ margin-top:0; }
+        line-height: 22px;
+        .fui-label{ 
+            display: inline-block; 
+            color: #333; 
+            margin: 0 5px;
+            position: relative;
+            top: -15px;
+            width: 100%;
+            text-align: right;
+            // padding-right: 10px;
+            text-justify: justify;
+        }
+    }
+    .fui-form-td{
+    // border: 1px solid red;
+        position: relative;
+        // .fui-form-input-wrap{
+        //     // margin: 14px 4px;
+        //     padding: 12px 0;
+        // }
+        .fui-form-tr{
+            .fui-form-td{
+                padding: 10px 0;
+            }
+        }
+        .tips{
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: red;
+            height: 20px;
+            font-size: 14px;
+        }
+        .empty{ height: 20px; font-size: 14px; }
+    }
+
+    &-td + &-td{
+        padding-left: 10px;
+    }
+    &-tr:first-child &-td{
+        padding-top: 0;
+    }
+    &-tr:last-child &-td{
+        padding-bottom: 0;
+    }
+
+}

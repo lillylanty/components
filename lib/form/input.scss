@@ -1,0 +1,14 @@
+@import '../_helper.scss';
+.fui-input{
+    padding: 4px 8px;
+    line-height: 22px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 0 2px fade-out($color: $main-color, $amount: 1);
+    transition: box-shadow 10s;
+    &:focus{
+        outline: 0;
+        border-color: $main-color;
+        box-shadow: 0 0 0 2px fade-out($color: $main-color, $amount: 0.5)
+    }
+    
+}

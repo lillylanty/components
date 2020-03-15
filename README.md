@@ -32,3 +32,7 @@ git checkout master
 
 
 然后执行 sh ./doc.sh
+
+
+一些知识点
+ //跨状态的变量用useRef 不要用 useState

@@ -3,7 +3,7 @@ import scrollbarWidth from './scrollbar-width';
 import './style.scss';
 import {
     //@ts-ignore
-    HTMLAttributes, MouseEventHandler, UIEventHandler,
+    HTMLAttributes, MouseEventHandler, UIEventHandler,TouchEventHandler,
     useState, useEffect, useRef
 } from "react";
 interface Props extends HTMLAttributes<HTMLElement> {
@@ -16,7 +16,7 @@ const Scroll: React.FunctionComponent<Props> = (props) => {
 
     const [barHeight, setBarHeight ] = useState(0);
     const [barTop, _setBarTop] = useState(0);
-    const [barVisible, setBarVisible] = useState('ontouchstart' in document.documentElement)
+    const [barVisible, setBarVisible] = useState(!('ontouchstart' in document.documentElement))
 
     const setBarTop = (number:number)=>{
         if(number<0) {return}
@@ -67,12 +67,12 @@ const Scroll: React.FunctionComponent<Props> = (props) => {
         const scrollTop = wholeDivRef.current!.scrollTop; // 容器滚动的距离
 
         setBarTop(scrollTop * viewHeight / scrollHeight)
-        if(timerIdRef.current !== null ){
-            clearTimeout(timerIdRef.current!)
-        }
-        timerIdRef.current = window.setTimeout(() => {
-            setBarVisible(false)
-        }, 1000);
+            if(timerIdRef.current !== null ){
+                clearTimeout(timerIdRef.current!)
+            }
+            timerIdRef.current = window.setTimeout(() => {
+                setBarVisible(false)
+            }, 1500);
     }
 
     useEffect(() => {    
@@ -85,20 +85,80 @@ const Scroll: React.FunctionComponent<Props> = (props) => {
     }, []);
 
     useEffect(() => {
+        // setBarVisible(!('ontouchstart' in document.documentElement))
         console.log('barVisible', barVisible)
         // return () => {
         //     cleanup
         // };
     }, [barVisible]);
+// @ts-ignore
+    const [translateY, _setTranslateY] = useState(0)
+    const setTranslateY = (y:number)=>{
+        if(y<0){
+            return 
+        }else if(y > 150 ){
+            y = 150
+        }
+        _setTranslateY(y)
+    }
+    //跨状态的变量用useRef 不要用 useState
+    const lastYRef = useRef(0)
+    const moveCount = useRef(0)
+    const pulling = useRef(false)
+
+    const onTouchStart:TouchEventHandler = (e)=>{
+        const scrollTop = wholeDivRef.current!.scrollTop
+        if(scrollTop !== 0){
+            return
+        }
+        lastYRef.current = e.touches[0].clientY
+        moveCount.current = 0
+        pulling.current = true;
+        console.log('y1',lastYRef.current )
+    }
+
+    const onTouchMove:TouchEventHandler = (e)=>{
+        const deltaY = e.touches[0].clientY - lastYRef.current 
+        moveCount.current += 1
+        if( moveCount.current === 1 && deltaY <0){
+            // 不是下拉，是正常的内容滚动
+            pulling.current = false
+            console.log('deltaY',deltaY)
+            return
+        }
+        if(pulling.current === false){
+            return
+        }
+        if(deltaY>0){
+            console.log('看上面')
+            setTranslateY(translateY + deltaY)
+        }else{
+            setTranslateY(translateY + deltaY)
+            console.log('看下面')
+        }
+        lastYRef.current = e.touches[0].clientY
+    }
+    
+    const onTouchEnd:TouchEventHandler = (e)=>{
+        // lastYRef.current = e.touches[0].clientY
+        setTranslateY(0)
+        console.log('y2',lastYRef.current )
+    }
 
     return (
         <div className="fui-scroll" {...rest}
             // onMouseMove={onMouseMoveBar}
             // onMouseUp={onMouseUpBar}
         >
-            <div className="fui-scroll-inner" style={{ right: -scrollbarWidth() }}
+            <div className="fui-scroll-inner" style={{ 
+                right: -scrollbarWidth() ,
+                transform: `translateY${translateY}px`
+            }}
                 ref={wholeDivRef}
                 onScroll={onContScroll}
+                onTouchMove = {onTouchMove}
+                onTouchStart={onTouchStart}
+                onTouchEnd={onTouchEnd}
             >
                 {children}
             </div>
@@ -111,7 +171,7 @@ const Scroll: React.FunctionComponent<Props> = (props) => {
             </div>
                 )
             }
-            
+            <div className="fui-scroll-p" style={{height:`${translateY}px`}}> 下... </div>
         </div>
     )
 }

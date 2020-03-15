@@ -33,4 +33,17 @@
         left:0;
         right: 1px;
     }
+    &-pulling{
+        overflow: hidden;
+        border: 1px solid green;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        &-icon{
+            font-size: 28px;
+        }
+        &-text{
+            font-size: 20px;
+        }
+    }
 }
